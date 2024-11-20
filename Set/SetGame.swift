@@ -33,8 +33,9 @@ struct SetGame {
             }
         }
         deck.shuffle()
-        deal3Cards()
-        deal3Cards()
+        for _ in 0...3 {
+            deal3Cards()
+        }
     }
     
     mutating func select(_ card: Card) {

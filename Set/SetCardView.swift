@@ -41,7 +41,7 @@ struct SetCardView: View {
         let spacing = size.width / 8
         VStack(spacing: spacing) {
             ForEach(0..<amount, id: \.self) { index in
-                symbol.aspectRatio(1, contentMode: .fit)
+                symbol.aspectRatio(2, contentMode: .fit)
             }
         }
         .padding(spacing)
@@ -54,7 +54,7 @@ struct SetCardView: View {
         case .a:
             applyShading(toShape: RoundedRectangle(cornerRadius: 5))
         case .b:
-            applyShading(toShape: Circle())
+            applyShading(toShape: Capsule())
         case .c:
             applyShading(toShape: RoundedRectangle(cornerRadius: 5))
         }
