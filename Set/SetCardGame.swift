@@ -13,11 +13,15 @@ class SetCardGame: ObservableObject {
     @Published private var game = SetGame()
     
     var amountOfCardsInDeck: Int {
-        return game.cardsInDeck.count
+        return game.deck.count
     }
     
-    var cardsOnBoard: [SetGame.Card] {
-        return game.cardsOnBoard
+    var visibleCards: [SetGame.Card] {
+        return game.drawnCards
+    }
+    
+    var matchStatus: SetGame.MatchStatus {
+        return game.matchStatus
     }
     
     // MARK: - Intents

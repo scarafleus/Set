@@ -16,8 +16,11 @@ struct SetCardGameView: View {
     
     var body: some View {
         VStack {
-            AspectVGrid(items: setCardGame.cardsOnBoard, aspectRatio: aspectRatio) { card in
-                SetCardView(card: card)
+            AspectVGrid(items: setCardGame.visibleCards, aspectRatio: aspectRatio) { card in
+                SetCardView(card: card, matchStatus: setCardGame.matchStatus)
+                    .onTapGesture {
+                        setCardGame.select(card)
+                    }
             }
             Spacer()
             controlBar

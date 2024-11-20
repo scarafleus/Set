@@ -9,12 +9,19 @@ import SwiftUI
 
 struct SetCardView: View {
     let card: SetGame.Card
+    let matchStatus: SetGame.MatchStatus
     
     var body: some View {
         ZStack {
             GeometryReader { geometry in
                 RoundedRectangle(cornerRadius: 10)
                     .foregroundColor(.white)
+                if card.isSelected {
+                    let outlineWidth = geometry.size.width * 0.04
+                    let outlineColor: Color = matchStatus == .undetermined ? .blue : matchStatus == .matched ? .green : .red
+                    RoundedRectangle(cornerRadius: 10)
+                        .stroke(outlineColor, lineWidth: outlineWidth)
+                }
                 symbols(size: geometry.size)
             }
         }
@@ -79,11 +86,11 @@ struct SetCardView: View {
 
 #Preview {
     HStack {
-        SetCardView(card: SetGame.Card(color: .a, amount: .a, shape: .a, shading: .a, id: "unique1"))
+        SetCardView(card: SetGame.Card(color: .a, amount: .a, shape: .a, shading: .a, id: "unique1"), matchStatus: .undetermined)
             .aspectRatio(2/3, contentMode: .fit)
-        SetCardView(card: SetGame.Card(color: .b, amount: .b, shape: .b, shading: .b, id: "unique2"))
+        SetCardView(card: SetGame.Card(color: .b, amount: .b, shape: .b, shading: .b, isSelected: true, id: "unique2"), matchStatus: .mismatched)
             .aspectRatio(2/3, contentMode: .fit)
-        SetCardView(card: SetGame.Card(color: .c, amount: .c, shape: .c, shading: .c, id: "unique3"))
+        SetCardView(card: SetGame.Card(color: .c, amount: .c, shape: .c, shading: .c, id: "unique3"), matchStatus: .matched)
             .aspectRatio(2/3, contentMode: .fit)
     }
 }
