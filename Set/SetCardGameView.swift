@@ -12,7 +12,7 @@ import SwiftUI
 struct SetCardGameView: View {
     @ObservedObject var setCardGame: SetCardGame
     
-    private let aspectRatio: CGFloat = 2/3
+    private let aspectRatio: CGFloat = 3/5
     
     var body: some View {
         VStack {

@@ -12,18 +12,13 @@ struct SetCardView: View {
     let matchStatus: SetGame.MatchStatus
     
     var body: some View {
-        ZStack {
-            GeometryReader { geometry in
-                RoundedRectangle(cornerRadius: 10)
-                    .foregroundColor(.white)
-                if card.isSelected {
-                    let outlineWidth = geometry.size.width * 0.04
-                    let outlineColor: Color = matchStatus == .undetermined ? .blue : matchStatus == .matched ? .green : .red
-                    RoundedRectangle(cornerRadius: 10)
-                        .stroke(outlineColor, lineWidth: outlineWidth)
-                }
-                symbols(size: geometry.size)
-            }
+        GeometryReader { geometry in
+            let outlineWidth = geometry.size.width * Constants.outlineFactor
+            symbols(size: geometry.size)
+                .cardify(
+                    isSelected: card.isSelected,
+                    matchStatus: matchStatus,
+                    lineWidth: outlineWidth)
         }
         .padding(4)
     }
@@ -38,13 +33,14 @@ struct SetCardView: View {
     
     @ViewBuilder
     private func symbols(size: CGSize) -> some View {
-        let spacing = size.width / 8
+        let spacing = size.width * Constants.Symbols.spacingFactor
+        let inset = size.width * Constants.inset
         VStack(spacing: spacing) {
             ForEach(0..<amount, id: \.self) { index in
-                symbol.aspectRatio(2, contentMode: .fit)
+                symbol.aspectRatio(Constants.Symbols.aspectRatio, contentMode: .fit)
             }
         }
-        .padding(spacing)
+        .padding(inset)
         .frame(width: size.width, height: size.height, alignment: .center)
     }
     
@@ -52,25 +48,25 @@ struct SetCardView: View {
     private var symbol: some View {
         switch card.shape {
         case .a:
-            applyShading(toShape: RoundedRectangle(cornerRadius: 5))
+            applyShading(toShape: Diamond())
         case .b:
             applyShading(toShape: Capsule())
         case .c:
-            applyShading(toShape: RoundedRectangle(cornerRadius: 5))
+            applyShading(toShape: Squiggle())
         }
     }
     
     private func applyShading(toShape shape: some Shape) -> some View {
         ZStack {
             shape.fill(color).opacity(opacity)
-            shape.stroke(color, lineWidth: 2)
+            shape.stroke(color, lineWidth: Constants.lineWidth)
         }
     }
     
     private var opacity: CGFloat {
         switch card.shading {
         case .a: return 0
-        case .b: return 0.3
+        case .b: return Constants.shadingOpacity
         case .c: return 1
         }
     }
@@ -82,15 +78,28 @@ struct SetCardView: View {
         case .c: return Color(#colorLiteral(red: 0.4745098054, green: 0.8392156959, blue: 0.9764705896, alpha: 1))
         }
     }
+    
+    private struct Constants {
+        static let shadingOpacity: CGFloat = 0.3
+        static let lineWidth: CGFloat = 2
+        static let inset: CGFloat = 0.15
+        static let outlineFactor: CGFloat = 0.04
+        struct Symbols {
+            static let aspectRatio: CGFloat = 2
+            static let spacingFactor: CGFloat = 0.12
+        }
+    }
 }
 
 #Preview {
     HStack {
-        SetCardView(card: SetGame.Card(color: .a, amount: .a, shape: .a, shading: .a, id: "unique1"), matchStatus: .undetermined)
-            .aspectRatio(2/3, contentMode: .fit)
+        SetCardView(card: SetGame.Card(color: .a, amount: .b, shape: .c, shading: .c, id: "unique1"), matchStatus: .undetermined)
+            .aspectRatio(3/5, contentMode: .fit)
+        SetCardView(card: SetGame.Card(color: .a, amount: .a, shape: .a, shading: .a, isSelected: true, id: "unique1"), matchStatus: .undetermined)
+            .aspectRatio(3/5, contentMode: .fit)
         SetCardView(card: SetGame.Card(color: .b, amount: .b, shape: .b, shading: .b, isSelected: true, id: "unique2"), matchStatus: .mismatched)
-            .aspectRatio(2/3, contentMode: .fit)
-        SetCardView(card: SetGame.Card(color: .c, amount: .c, shape: .c, shading: .c, id: "unique3"), matchStatus: .matched)
-            .aspectRatio(2/3, contentMode: .fit)
+            .aspectRatio(3/5, contentMode: .fit)
+        SetCardView(card: SetGame.Card(color: .c, amount: .c, shape: .c, shading: .c, isSelected: true, id: "unique3"), matchStatus: .matched)
+            .aspectRatio(3/5, contentMode: .fit)
     }
 }
