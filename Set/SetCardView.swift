@@ -18,9 +18,10 @@ struct SetCardView: View {
                 .cardify(
                     isSelected: card.isSelected,
                     matchStatus: matchStatus,
-                    lineWidth: outlineWidth)
+                    lineWidth: outlineWidth
+                )
         }
-        .padding(4)
+        .padding(Constants.cardInset)
     }
     
     private var amount: Int {
@@ -34,7 +35,7 @@ struct SetCardView: View {
     @ViewBuilder
     private func symbols(size: CGSize) -> some View {
         let spacing = size.width * Constants.Symbols.spacingFactor
-        let inset = size.width * Constants.inset
+        let inset = size.width * Constants.cardEdge
         VStack(spacing: spacing) {
             ForEach(0..<amount, id: \.self) { index in
                 symbol.aspectRatio(Constants.Symbols.aspectRatio, contentMode: .fit)
@@ -82,8 +83,9 @@ struct SetCardView: View {
     private struct Constants {
         static let shadingOpacity: CGFloat = 0.3
         static let lineWidth: CGFloat = 2
-        static let inset: CGFloat = 0.15
+        static let cardEdge: CGFloat = 0.15
         static let outlineFactor: CGFloat = 0.04
+        static let cardInset: CGFloat = 4
         struct Symbols {
             static let aspectRatio: CGFloat = 2
             static let spacingFactor: CGFloat = 0.12
@@ -102,4 +104,5 @@ struct SetCardView: View {
         SetCardView(card: SetGame.Card(color: .c, amount: .c, shape: .c, shading: .c, isSelected: true, id: "unique3"), matchStatus: .matched)
             .aspectRatio(3/5, contentMode: .fit)
     }
+    .padding()
 }

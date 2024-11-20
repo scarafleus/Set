@@ -32,22 +32,41 @@ struct SetCardGameView: View {
         HStack {
             newGameButton
             Spacer()
+            deckCount
+            Spacer()
             dealCardsButton
         }
     }
     
     private var newGameButton: some View {
-        Button("New game") {
+        Button(action: {
             setCardGame.newGame()
-        }
+        }, label: {
+            Image(systemName: "arrow.clockwise")
+                .font(.title)
+                .padding(2)
+        })
+    }
+    
+    @ViewBuilder
+    private var deckCount: some View {
+        let cardsLeft = setCardGame.amountOfCardsInDeck
+        Text(cardsLeft > 0 ? "\(cardsLeft) cards left" : "Deck is empty")
+            .font(.title2)
+            .padding(8)
+            .background(RoundedRectangle(cornerRadius: 4).fill(.gray))
     }
     
     @ViewBuilder
     private var dealCardsButton: some View {
         let cardsLeft = setCardGame.amountOfCardsInDeck
-        Button(cardsLeft > 0 ? "\(cardsLeft) cards left" : "Deck is empty") {
+        Button(action: {
             setCardGame.deal3Cards()
-        }
+        }, label: {
+            Image(systemName: "rectangle.stack.badge.plus")
+                .font(.title)
+                .padding(2)
+        })
         .disabled(cardsLeft == 0)
     }
 }
