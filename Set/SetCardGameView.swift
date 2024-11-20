@@ -15,24 +15,40 @@ struct SetCardGameView: View {
     private let aspectRatio: CGFloat = 2/3
     
     var body: some View {
-        AspectVGrid(items: setCardGame., aspectRatio: <#T##CGFloat#>, content: <#T##(Identifiable) -> View#>)
+        VStack {
+            AspectVGrid(items: setCardGame.cardsOnBoard, aspectRatio: aspectRatio) { card in
+                SetCardView(card: card)
+            }
+            Spacer()
+            controlBar
+        }
+        .padding()
+    }
+    
+    private var controlBar: some View {
+        HStack {
+            newGameButton
+            Spacer()
+            dealCardsButton
+        }
+    }
+    
+    private var newGameButton: some View {
+        Button("New game") {
+            setCardGame.newGame()
+        }
+    }
+    
+    @ViewBuilder
+    private var dealCardsButton: some View {
+        let cardsLeft = setCardGame.amountOfCardsInDeck
+        Button(cardsLeft > 0 ? "\(cardsLeft) cards left" : "Deck is empty") {
+            setCardGame.deal3Cards()
+        }
+        .disabled(cardsLeft == 0)
     }
 }
 
 #Preview {
     SetCardGameView(setCardGame: SetCardGame())
-}
-
-struct SetCardView: View {
-    let card: SetGame.Card
-    
-    var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
-        }
-        .padding()
-    }
 }

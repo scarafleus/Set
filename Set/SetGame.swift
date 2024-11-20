@@ -29,14 +29,22 @@ struct SetGame {
                 }
             }
         }
+        cardsInDeck.shuffle()
+        deal3Cards()
+        deal3Cards()
     }
     
     func select(_ card: Card) {
         
     }
     
-    func deal3Cards() {
-        
+    mutating func deal3Cards() {
+        for _ in 0..<3 {
+            let card = cardsInDeck.popLast()
+            if let poppedCard = card {
+                cardsOnBoard += [poppedCard]
+            }
+        }
     }
     
     struct Card: Identifiable, Equatable, CustomDebugStringConvertible {
@@ -44,6 +52,7 @@ struct SetGame {
         let amount: CardProperty
         let shape: CardProperty
         let shading: CardProperty
+        var isSelected = false
         
         let id: String
         var debugDescription: String { return id }

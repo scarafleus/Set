@@ -22,6 +22,10 @@ class SetCardGame: ObservableObject {
     
     // MARK: - Intents
     
+    func newGame() {
+        game = SetGame()
+    }
+    
     func select(_ card: SetGame.Card) {
         game.select(card)
     }
