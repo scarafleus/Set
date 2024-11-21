@@ -12,11 +12,9 @@ import SwiftUI
 struct SetCardGameView: View {
     @ObservedObject var setCardGame: SetCardGame
     
-    private let aspectRatio: CGFloat = 3/5
-    
     var body: some View {
         VStack {
-            AspectVGrid(items: setCardGame.visibleCards, aspectRatio: aspectRatio) { card in
+            AspectVGrid(items: setCardGame.visibleCards, aspectRatio: Constants.aspectRatio) { card in
                 SetCardView(card: card, matchStatus: setCardGame.matchStatus)
                     .onTapGesture {
                         setCardGame.select(card)
@@ -44,7 +42,7 @@ struct SetCardGameView: View {
         }, label: {
             Image(systemName: "arrow.clockwise")
                 .font(.title)
-                .padding(2)
+                .padding(Constants.buttonPadding)
         })
     }
     
@@ -53,8 +51,8 @@ struct SetCardGameView: View {
         let cardsLeft = setCardGame.amountOfCardsInDeck
         Text(cardsLeft > 0 ? "\(cardsLeft) cards left" : "Deck is empty")
             .font(.title2)
-            .padding(8)
-            .background(RoundedRectangle(cornerRadius: 4).fill(.gray))
+            .padding(Constants.deckCountPadding)
+            .background(RoundedRectangle(cornerRadius: 4).stroke(.gray, lineWidth: Constants.outlineWidth))
     }
     
     @ViewBuilder
@@ -65,9 +63,16 @@ struct SetCardGameView: View {
         }, label: {
             Image(systemName: "rectangle.stack.badge.plus")
                 .font(.title)
-                .padding(2)
+                .padding(Constants.buttonPadding)
         })
         .disabled(cardsLeft == 0)
+    }
+    
+    private struct Constants {
+        static let aspectRatio: CGFloat = 3/5
+        static let buttonPadding: CGFloat = 2
+        static let outlineWidth: CGFloat = 2
+        static let deckCountPadding: CGFloat = 8
     }
 }
 
